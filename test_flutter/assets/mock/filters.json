@@ -1,0 +1,316 @@
+{
+  "tabs": [
+    {
+      "key": "basic",
+      "title": "Basic",
+      "sections": [
+        { "key": "shariah", "title": "Shariah Classification", "type": "dropdown", "metric": "shariah",
+          "options": ["Compliant", "Non-compliant"] },
+        { "key": "region", "title": "Region", "type": "dropdown", "metric": "region",
+          "placeholder": "Global", "options": ["Global", "US", "Europe", "Asia"] },
+        { "key": "exchange", "title": "Exchange", "type": "dropdown", "metric": "exchange",
+          "options": ["NASDAQ", "NYSE", "LSE"] },
+        { "key": "sector", "title": "Sector", "type": "dropdown", "metric": "sector",
+          "options": ["Technology", "Healthcare", "Energy", "Financials", "Consumer"] },
+        { "key": "industry", "title": "Industry", "type": "searchable", "metric": "industry",
+          "options": ["Semiconductors", "Software", "Hardware", "Cloud Computing", "Automotive", "Banking", "Pharmaceuticals", "Oil & Gas", "Retail"] },
+        { "key": "marketCap", "title": "Market cap", "type": "chips", "metric": "marketCap",
+          "min": 0, "max": 3100000000000,
+          "options": [
+            { "label": "All" },
+            { "label": "<$300M", "max": 300000000 },
+            { "label": "$300M-$2B", "min": 300000000, "max": 2000000000 },
+            { "label": "$2B-$10B", "min": 2000000000, "max": 10000000000 },
+            { "label": "$10B-$200B", "min": 10000000000, "max": 200000000000 },
+            { "label": ">$200B", "min": 200000000000 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "price", "title": "Price", "type": "chips", "metric": "price",
+          "min": 0, "max": 1000,
+          "options": [
+            { "label": "All" },
+            { "label": "<$50", "max": 50 },
+            { "label": "$50-$200", "min": 50, "max": 200 },
+            { "label": ">$200", "min": 200 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "avgVolume3M", "title": "Avg volume 3M", "type": "chips", "metric": "avgVolume3M",
+          "min": 0, "max": 100000000,
+          "options": [
+            { "label": "All" },
+            { "label": ">10M", "min": 10000000 },
+            { "label": ">50M", "min": 50000000 },
+            { "label": "Custom", "custom": true }
+          ] }
+      ]
+    },
+    {
+      "key": "fundamental",
+      "title": "Fundamental",
+      "sections": [
+        { "key": "peRatio", "title": "P/E ratio", "group": "Valuation", "type": "chips", "metric": "peRatio",
+          "min": -20, "max": 200,
+          "options": [
+            { "label": "All" },
+            { "label": "<0", "max": 0 },
+            { "label": "<15", "max": 15 },
+            { "label": "<30", "max": 30 },
+            { "label": "<50", "max": 50 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "psRatio", "title": "P/S ratio", "group": "Valuation", "type": "chips", "metric": "psRatio",
+          "min": 0, "max": 40,
+          "options": [
+            { "label": "All" },
+            { "label": "<1", "max": 1 },
+            { "label": "<5", "max": 5 },
+            { "label": "<10", "max": 10 },
+            { "label": "<20", "max": 20 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "pbRatio", "title": "P/B ratio", "group": "Valuation", "type": "chips", "metric": "pbRatio",
+          "min": 0, "max": 60,
+          "options": [
+            { "label": "All" },
+            { "label": "<1", "max": 1 },
+            { "label": "<3", "max": 3 },
+            { "label": "<5", "max": 5 },
+            { "label": "<10", "max": 10 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "pcfRatio", "title": "P/CF ratio", "group": "Valuation", "type": "chips", "metric": "pcfRatio",
+          "min": 0, "max": 100,
+          "options": [
+            { "label": "All" },
+            { "label": "<5", "max": 5 },
+            { "label": "<10", "max": 10 },
+            { "label": "<20", "max": 20 },
+            { "label": "<40", "max": 40 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "roe", "title": "ROE", "group": "Profitability", "type": "chips", "metric": "roe",
+          "min": -20, "max": 100, "unit": "%",
+          "options": [
+            { "label": "All" },
+            { "label": "<0", "max": 0 },
+            { "label": "<5%", "max": 5 },
+            { "label": "<10%", "max": 10 },
+            { "label": "<15%", "max": 15 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "roa", "title": "ROA", "group": "Profitability", "type": "chips", "metric": "roa",
+          "min": -20, "max": 60, "unit": "%",
+          "options": [
+            { "label": "All" },
+            { "label": ">5%", "min": 5 },
+            { "label": ">10%", "min": 10 },
+            { "label": ">20%", "min": 20 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "roi", "title": "ROI", "group": "Profitability", "type": "chips", "metric": "roi",
+          "min": -20, "max": 80, "unit": "%",
+          "options": [
+            { "label": "All" },
+            { "label": ">5%", "min": 5 },
+            { "label": ">10%", "min": 10 },
+            { "label": ">20%", "min": 20 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "grossMargin", "title": "Gross margin", "group": "Profitability", "type": "chips", "metric": "grossMargin",
+          "min": 0, "max": 100, "unit": "%",
+          "options": [
+            { "label": "All" },
+            { "label": ">20%", "min": 20 },
+            { "label": ">40%", "min": 40 },
+            { "label": ">60%", "min": 60 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "operatingMargin", "title": "Operating margin", "group": "Profitability", "type": "chips", "metric": "operatingMargin",
+          "min": -20, "max": 80, "unit": "%",
+          "options": [
+            { "label": "All" },
+            { "label": ">10%", "min": 10 },
+            { "label": ">20%", "min": 20 },
+            { "label": ">30%", "min": 30 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "netProfitMargin", "title": "Net profit margin", "group": "Profitability", "type": "chips", "metric": "netProfitMargin",
+          "min": -20, "max": 80, "unit": "%",
+          "options": [
+            { "label": "All" },
+            { "label": ">5%", "min": 5 },
+            { "label": ">10%", "min": 10 },
+            { "label": ">20%", "min": 20 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "revenueGrowth", "title": "Revenue growth", "group": "Growth", "type": "chips", "metric": "revenueGrowth",
+          "min": -20, "max": 100, "unit": "%",
+          "options": [
+            { "label": "All" },
+            { "label": ">0%", "min": 0 },
+            { "label": ">5%", "min": 5 },
+            { "label": ">10%", "min": 10 },
+            { "label": ">15%", "min": 15 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "epsGrowth", "title": "EPS growth", "group": "Growth", "type": "chips", "metric": "epsGrowth",
+          "min": -50, "max": 150, "unit": "%",
+          "options": [
+            { "label": "All" },
+            { "label": ">0%", "min": 0 },
+            { "label": ">5%", "min": 5 },
+            { "label": ">10%", "min": 10 },
+            { "label": ">15%", "min": 15 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "currentRatio", "title": "Current ratio", "group": "Financial Health", "type": "chips", "metric": "currentRatio",
+          "min": 0, "max": 6,
+          "options": [
+            { "label": "All" },
+            { "label": ">0.5%", "min": 0.5 },
+            { "label": ">1%", "min": 1 },
+            { "label": ">1.5%", "min": 1.5 },
+            { "label": ">2%", "min": 2 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "quickRatio", "title": "Quick ratio", "group": "Financial Health", "type": "chips", "metric": "quickRatio",
+          "min": 0, "max": 6,
+          "options": [
+            { "label": "All" },
+            { "label": ">0.5", "min": 0.5 },
+            { "label": ">1", "min": 1 },
+            { "label": ">1.5", "min": 1.5 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "zScore", "title": "Z-score", "group": "Financial Health", "type": "chips", "metric": "zScore",
+          "min": 0, "max": 20,
+          "options": [
+            { "label": "All" },
+            { "label": ">1.8", "min": 1.8 },
+            { "label": ">3", "min": 3 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "freeCashFlow", "title": "Free cash flow", "group": "Financial Health", "type": "chips", "metric": "freeCashFlow",
+          "min": -5000000000, "max": 100000000000,
+          "options": [
+            { "label": "All" },
+            { "label": ">0", "min": 0 },
+            { "label": ">1B", "min": 1000000000 },
+            { "label": ">5B", "min": 5000000000 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "dividendYield", "title": "Dividend yield", "group": "Dividends", "type": "chips", "metric": "dividendYield",
+          "min": 0, "max": 5, "unit": "%",
+          "options": [
+            { "label": "All" },
+            { "label": ">1%", "min": 1 },
+            { "label": ">2%", "min": 2 },
+            { "label": ">3%", "min": 3 },
+            { "label": ">4%", "min": 4 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "dividendGrowth5Y", "title": "Dividend growth 5Y", "group": "Dividends", "type": "chips", "metric": "dividendGrowth5Y",
+          "min": 0, "max": 30, "unit": "%",
+          "options": [
+            { "label": "All" },
+            { "label": ">5%", "min": 5 },
+            { "label": ">10%", "min": 10 },
+            { "label": ">15%", "min": 15 },
+            { "label": "Custom", "custom": true }
+          ] }
+      ]
+    },
+    {
+      "key": "technical",
+      "title": "Technical",
+      "sections": [
+        { "key": "priceChange1D", "title": "Price change 1D", "group": "Price Performance", "type": "chips", "metric": "priceChange1D",
+          "min": -10, "max": 10, "unit": "%",
+          "options": [
+            { "label": "All" },
+            { "label": "Up", "min": 0 },
+            { "label": "Down", "max": 0 },
+            { "label": "Up 2%", "min": 2 },
+            { "label": "Down 2%", "max": -2 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "priceChange1M", "title": "Price change 1M", "group": "Price Performance", "type": "chips", "metric": "priceChange1M",
+          "min": -50, "max": 100, "unit": "%",
+          "options": [
+            { "label": "All" },
+            { "label": "Up", "min": 0 },
+            { "label": "Down", "max": 0 },
+            { "label": "Up 10%", "min": 10 },
+            { "label": "Down 10%", "max": -10 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "priceChange3M", "title": "Price change 3M", "group": "Price Performance", "type": "chips", "metric": "priceChange3M",
+          "min": -60, "max": 150, "unit": "%",
+          "options": [
+            { "label": "All" },
+            { "label": "Up", "min": 0 },
+            { "label": "Down", "max": 0 },
+            { "label": "Up 20%", "min": 20 },
+            { "label": "Down 20%", "max": -20 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "week52High", "title": "52-week high", "group": "Price Performance", "type": "chips", "metric": "pctFrom52WHigh",
+          "min": 0, "max": 90, "unit": "%",
+          "options": [
+            { "label": "All" },
+            { "label": "At high", "max": 1 },
+            { "label": "Within 5%", "max": 5 },
+            { "label": "Within 10%", "max": 10 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "week52Low", "title": "52-week low", "group": "Price Performance", "type": "chips", "metric": "pctAbove52WLow",
+          "min": 0, "max": 400, "unit": "%",
+          "options": [
+            { "label": "All" },
+            { "label": "At low", "max": 1 },
+            { "label": "Within 5%", "max": 5 },
+            { "label": "Within 10%", "max": 10 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "sma50", "title": "50-day SMA", "group": "Moving Averages", "type": "chips", "metric": "sma50Distance",
+          "min": -30, "max": 30, "unit": "%",
+          "options": [
+            { "label": "All" },
+            { "label": "Over", "min": 0 },
+            { "label": "Under", "max": 0 },
+            { "label": ">5%", "min": 5 },
+            { "label": "<5%", "max": -5 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "sma150", "title": "150-day SMA", "group": "Moving Averages", "type": "chips", "metric": "sma150Distance",
+          "min": -30, "max": 30, "unit": "%",
+          "options": [
+            { "label": "All" },
+            { "label": "Over", "min": 0 },
+            { "label": "Under", "max": 0 },
+            { "label": ">5%", "min": 5 },
+            { "label": "<5%", "max": -5 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "sma200", "title": "200-day SMA", "group": "Moving Averages", "type": "chips", "metric": "sma200Distance",
+          "min": -30, "max": 30, "unit": "%",
+          "options": [
+            { "label": "All" },
+            { "label": "Over", "min": 0 },
+            { "label": "Under", "max": 0 },
+            { "label": ">5%", "min": 5 },
+            { "label": "<5%", "max": -5 },
+            { "label": "Custom", "custom": true }
+          ] },
+        { "key": "beta", "title": "Beta", "group": "Technical", "type": "chips", "metric": "beta",
+          "min": 0, "max": 3,
+          "options": [
+            { "label": "All" },
+            { "label": "<1", "max": 1 },
+            { "label": ">1", "min": 1 },
+            { "label": "Custom", "custom": true }
+          ] }
+      ]
+    }
+  ]
+}
