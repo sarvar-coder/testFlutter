@@ -74,10 +74,13 @@ class _PillTabBar extends StatelessWidget {
           children: [
             for (var i = 0; i < titles.length; i++) ...[
               if (i > 0) const SizedBox(width: 12),
-              _Pill(
-                label: titles[i],
-                selected: i == controller.index,
-                onTap: () => controller.animateTo(i),
+              Flexible(
+                fit: FlexFit.loose,
+                child: _Pill(
+                  label: titles[i],
+                  selected: i == controller.index,
+                  onTap: () => controller.animateTo(i),
+                ),
               ),
             ],
           ],
@@ -110,11 +113,15 @@ class _Pill extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppRadii.tabBarPill),
           border: selected ? null : Border.all(color: AppColors.divider),
         ),
-        child: Text(
-          label,
-          style: AppTextStyles.chipLabel.copyWith(
-            color: selected ? Colors.white : AppColors.textPrimary,
-            fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            label,
+            maxLines: 1,
+            style: AppTextStyles.chipLabel.copyWith(
+              color: selected ? Colors.white : AppColors.textPrimary,
+              fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+            ),
           ),
         ),
       ),
