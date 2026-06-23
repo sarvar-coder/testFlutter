@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../core/theme/app_theme.dart';
 
@@ -71,22 +72,18 @@ class FilterRow extends StatelessWidget {
                   if (active && onClear != null)
                     GestureDetector(
                       onTap: onClear,
-                      child: Container(
+                      child: SvgPicture.asset(
+                        AppIcons.xMarkCircle,
                         width: 22,
                         height: 22,
-                        decoration: const BoxDecoration(
-                          color: AppColors.divider,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.close,
-                          size: 14,
-                          color: AppColors.textMuted,
-                        ),
                       ),
                     )
-                  else if (!expanded)
-                    Text(valueText, style: AppTextStyles.countFooter),
+                  else if (!expanded && !title.contains("Shariah"))
+                    Text(valueText, style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textMuted,
+                    )),
                 ],
               ),
             ),

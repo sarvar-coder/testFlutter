@@ -17,7 +17,9 @@ class StockListItem extends StatelessWidget {
   final Stock stock;
   final VoidCallback? onTap;
 
-  /// Shared logo shown for every stock.
+  /// Shared logo shown for every stock. (Kept as a raster asset: the design's
+  /// "SVG" logo is just a base64 PNG wrapped in pattern/image tags, which
+  /// flutter_svg does not render.)
   static const String _logoAsset = 'assets/images/adobe_icon.png';
 
   @override

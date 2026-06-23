@@ -7,6 +7,7 @@ import '../../core/theme/app_theme.dart';
 import '../../viewmodels/filter_viewmodel.dart';
 import '../widgets/chip_selector.dart';
 import '../widgets/collapsible_section.dart';
+import '../widgets/custom_range_field.dart';
 import '../widgets/custom_range_slider.dart';
 import '../widgets/filter_row.dart';
 import '../widgets/range_slider_filter.dart';
@@ -91,6 +92,7 @@ class _FilterSectionListState extends State<FilterSectionList> {
                 title: entry.key,
                 expanded: _expandedGroups.contains(entry.key),
                 active: entry.value.any((s) => vm.state.isActive(s.key)),
+                summary: _groupSummary(entry.value, vm),
                 onToggle: () => _toggleGroup(entry.key),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -102,6 +104,7 @@ class _FilterSectionListState extends State<FilterSectionList> {
                 ),
               ),
           const SizedBox(height: 16),
+          _matchCountLabel(vm),
         ],
       );
     }
@@ -123,7 +126,18 @@ class _FilterSectionListState extends State<FilterSectionList> {
             ),
         ],
         const SizedBox(height: 16),
+        _matchCountLabel(vm),
       ],
+    );
+  }
+
+  /// The "N stocks match your filters" label, right-aligned at the very bottom
+  /// of the section list (directly below the last row).
+  Widget _matchCountLabel(FilterViewModel vm) {
+    return Text(
+      '${vm.matchCount} stocks match your filters',
+      textAlign: TextAlign.right,
+      style: AppTextStyles.countFooter.copyWith(color: AppColors.textPrimary),
     );
   }
 
@@ -187,6 +201,20 @@ class _FilterSectionListState extends State<FilterSectionList> {
       case FilterType.unknown:
         return null;
     }
+  }
+
+  /// One-line summary of a group's active children, e.g.
+  /// "P/E ratio <50, P/S ratio <30 ...". Null when nothing is active.
+  String? _groupSummary(List<FilterSection> sections, FilterViewModel vm,
+      {int head = 2}) {
+    final parts = <String>[];
+    for (final s in sections) {
+      final v = _summary(s, vm.state.selectionFor(s.key));
+      if (v != null) parts.add('${s.title} $v');
+    }
+    if (parts.isEmpty) return null;
+    if (parts.length <= head) return parts.join(', ');
+    return '${parts.take(head).join(', ')} ...';
   }
 
   /// Join picked values, collapsing the overflow into a "+N" suffix
@@ -269,15 +297,23 @@ class _FilterSectionListState extends State<FilterSectionList> {
         ),
         if (customSelected) ...[
           const SizedBox(height: 12),
-          CustomRangeSlider(
-            boundMin: (section.min ?? 0).toDouble(),
-            boundMax: (section.max ?? 100).toDouble(),
-            unit: section.unit ?? '',
-            min: selection?.customMin,
-            max: selection?.customMax,
-            onChanged: (min, max) =>
-                vm.setCustomRange(section.key, min: min, max: max),
-          ),
+          if (section.key == 'marketCap' || section.key == 'avgVolume3M')
+            CustomRangeField(
+              min: selection?.customMin,
+              max: selection?.customMax,
+              onChanged: (min, max) =>
+                  vm.setCustomRange(section.key, min: min, max: max),
+            )
+          else
+            CustomRangeSlider(
+              boundMin: (section.min ?? 0).toDouble(),
+              boundMax: (section.max ?? 100).toDouble(),
+              unit: section.unit ?? '',
+              min: selection?.customMin,
+              max: selection?.customMax,
+              onChanged: (min, max) =>
+                  vm.setCustomRange(section.key, min: min, max: max),
+            ),
         ],
       ],
     );

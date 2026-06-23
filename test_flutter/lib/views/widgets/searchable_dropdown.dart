@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../core/theme/app_theme.dart';
 
@@ -89,7 +90,11 @@ class _MultiSelectSheetState extends State<_MultiSelectSheet> {
                   ),
                   IconButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.close, color: AppColors.textMuted),
+                    icon: SvgPicture.asset(
+                      AppIcons.xMarkCircle,
+                      width: 24,
+                      height: 24,
+                    ),
                   ),
                 ],
               ),
@@ -118,20 +123,29 @@ class _MultiSelectSheetState extends State<_MultiSelectSheet> {
                 shrinkWrap: true,
                 children: [
                   for (final option in filtered)
-                    CheckboxListTile(
-                      value: _picked.contains(option),
-                      onChanged: (_) => _toggle(option),
-                      controlAffinity: ListTileControlAffinity.trailing,
-                      fillColor:
-                          WidgetStateProperty.all(Colors.transparent),
-                      checkColor: AppColors.black,
-                      side: WidgetStateBorderSide.resolveWith(
-                        (_) => const BorderSide(
-                          color: AppColors.textMuted,
-                          width: 1.5,
+                    ListTile(
+                      onTap: () => _toggle(option),
+                      title: Text(option, style: AppTextStyles.chipLabel),
+                      trailing: SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              AppIcons.checkbox,
+                              width: 24,
+                              height: 24,
+                            ),
+                            if (_picked.contains(option))
+                              const Icon(
+                                Icons.check,
+                                size: 16,
+                                color: AppColors.black,
+                              ),
+                          ],
                         ),
                       ),
-                      title: Text(option, style: AppTextStyles.chipLabel),
                     ),
                 ],
               ),

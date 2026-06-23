@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../core/theme/app_theme.dart';
 
@@ -15,6 +16,7 @@ class CollapsibleSection extends StatelessWidget {
     required this.onToggle,
     required this.child,
     this.active = false,
+    this.summary,
   });
 
   final String title;
@@ -22,6 +24,10 @@ class CollapsibleSection extends StatelessWidget {
   final VoidCallback onToggle;
   final Widget child;
   final bool active;
+
+  /// One-line summary of the active selections inside this section, shown below
+  /// the title while collapsed. When non-null it replaces the [active] dot.
+  final String? summary;
 
   @override
   Widget build(BuildContext context) {
@@ -41,28 +47,47 @@ class CollapsibleSection extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Flexible(
-                          child: Text(title, style: AppTextStyles.sectionTitle),
-                        ),
-                        if (active) ...[
-                          const SizedBox(width: 8),
-                          Container(
-                            width: 8,
-                            height: 8,
-                            decoration: const BoxDecoration(
-                              color: AppColors.accent,
-                              shape: BoxShape.circle,
+                        Row(
+                          children: [
+                            Flexible(
+                              child:
+                                  Text(title, style: AppTextStyles.sectionTitle),
                             ),
+                            if (active && summary == null) ...[
+                              const SizedBox(width: 8),
+                              Container(
+                                width: 8,
+                                height: 8,
+                                decoration: const BoxDecoration(
+                                  color: AppColors.accent,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                        if (summary != null && !expanded) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            summary!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyles.countFooter,
                           ),
                         ],
                       ],
                     ),
                   ),
-                  Icon(
-                    expanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                    color: AppColors.textMuted,
+                  RotatedBox(
+                    quarterTurns: expanded ? 2 : 0,
+                    child: SvgPicture.asset(
+                      AppIcons.chevronDown,
+                      width: 24,
+                      height: 24,
+                    ),
                   ),
                 ],
               ),

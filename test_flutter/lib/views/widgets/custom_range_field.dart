@@ -67,15 +67,14 @@ class _NumberField extends StatelessWidget {
       style: AppTextStyles.chipLabel,
       decoration: InputDecoration(
         labelText: label,
+        labelStyle: AppTextStyles.chipLabel.copyWith(color: AppColors.textMuted),
         isDense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppRadii.chip),
-          borderSide: const BorderSide(color: AppColors.divider),
+        contentPadding: const EdgeInsets.symmetric(vertical: 12),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.divider),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppRadii.chip),
-          borderSide: const BorderSide(color: AppColors.black),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.black),
         ),
       ),
       onChanged: (text) => onChanged(num.tryParse(text.trim())),

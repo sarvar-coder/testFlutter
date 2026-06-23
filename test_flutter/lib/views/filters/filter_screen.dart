@@ -32,6 +32,7 @@ class FilterScreen extends StatelessWidget {
       length: tabs.length,
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: const Text(
             'Stock Filters',
             style: TextStyle(fontWeight: FontWeight.w700),
@@ -141,11 +142,6 @@ class _BottomBar extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              '${vm.matchCount} stocks match your filters',
-              style: AppTextStyles.countFooter,
-            ),
-            const SizedBox(height: 12),
             Row(
               children: [
                 Expanded(

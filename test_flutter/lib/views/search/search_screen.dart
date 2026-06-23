@@ -1,4 +1,7 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/theme/app_theme.dart';
@@ -29,24 +32,76 @@ class _SearchScreenState extends State<SearchScreen> {
   /// Whether the current tab is backed by stock data (All / Stocks).
   bool get _showsStocks => _selectedTab == 0 || _selectedTab == 1;
 
-  void _openFilters(BuildContext context) {
+  Future<void> _openFilters(BuildContext context) async {
     final filterVM = context.read<FilterViewModel>();
     final searchVM = context.read<SearchViewModel>();
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => FilterScreen(
-          // Apply syncs the matched set onto the Search screen and pops back, so
-          // the applied state (green Filter, count header, filtered list) shows
-          // inline rather than on a separate results screen.
-          onApply: () {
-            searchVM.setSource(
-              filterVM.matched,
-              filtered: filterVM.hasActiveFilters,
-            );
-            Navigator.of(context).pop();
-          },
-        ),
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true, // allow a near-full-height sheet
+      useSafeArea: true, // respect status bar / notch at the top
+      backgroundColor: AppColors.transparent, // let our rounded sheet show
+      builder: (sheetContext) => Stack(
+        children: [
+          // Frosted-glass backdrop over the whole screen; tap to dismiss.
+          Positioned.fill(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => Navigator.of(sheetContext).maybePop(),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                // Faint light wash so the blurred content reads as "behind".
+                child: const ColoredBox(color: Color(0x0DFFFFFF)),
+              ),
+            ),
+          ),
+          // The sheet, anchored to the bottom. Drag the handle/sheet down to
+          // close.
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Dismissible(
+              key: const ValueKey('filter-sheet'),
+              direction: DismissDirection.down,
+              onDismissed: (_) => Navigator.of(sheetContext).maybePop(),
+              child: FractionallySizedBox(
+                heightFactor: 0.96,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(AppRadii.sheet),
+                  ),
+                  child: ColoredBox(
+                    color: AppColors.background,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const _DragHandle(),
+                        Expanded(
+                          child: FilterScreen(
+                            // Apply just closes the sheet; the post-await sync
+                            // below commits the current filter state onto the
+                            // Search screen.
+                            onApply: () => Navigator.of(sheetContext).pop(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            ),
+          ),
+        ],
       ),
+    );
+
+    // After the sheet closes by any means (Apply, back, or drag-to-dismiss),
+    // reflect the current filter state on the Search screen so the green Filter
+    // button and filtered list stay in sync — e.g. Clear all + back clears it.
+    searchVM.setSource(
+      filterVM.matched,
+      filtered: filterVM.hasActiveFilters,
     );
   }
 
@@ -59,15 +114,34 @@ class _SearchScreenState extends State<SearchScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Search',
-          style: TextStyle(fontWeight: FontWeight.w700),
-        ),
+        title: Row(children: [
+          SvgPicture.asset(
+            AppIcons.chevronLeft,
+            width: 24,
+            height: 24,
+          ),
+          const SizedBox(width: 12),
+          const Text(
+            'Search',
+            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14.0,),
+          )
+        ],),
         actions: [
           TextButton.icon(
             onPressed: () => _openFilters(context),
-            label: const Text('Filter'),
-            icon: const Icon(Icons.tune, size: 20),
+            label: const Text(
+              'Filter',
+            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14.0,),
+            ),
+            icon: SvgPicture.asset(
+              AppIcons.filter,
+              width: 24,
+              height: 24,
+              colorFilter: ColorFilter.mode(
+                filtered ? AppColors.filterActive : AppColors.textPrimary,
+                BlendMode.srcIn,
+              ),
+            ),
             iconAlignment: IconAlignment.end,
             style: TextButton.styleFrom(
               foregroundColor:
@@ -236,7 +310,26 @@ class _Tab extends StatelessWidget {
   }
 }
 
-class _SearchField extends StatelessWidget {
+/// Grey grabber pill shown at the top of the filter bottom sheet, signalling
+/// that the sheet can be dragged down to dismiss.
+class _DragHandle extends StatelessWidget {
+  const _DragHandle();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 40,
+      height: 4,
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.dragHandle,
+        borderRadius: BorderRadius.circular(2),
+      ),
+    );
+  }
+}
+
+class _SearchField extends StatefulWidget {
   const _SearchField({
     required this.onChanged,
     required this.onClear,
@@ -248,24 +341,45 @@ class _SearchField extends StatelessWidget {
   final bool showClear;
 
   @override
+  State<_SearchField> createState() => _SearchFieldState();
+}
+
+class _SearchFieldState extends State<_SearchField> {
+  final _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextField(
-      onChanged: onChanged,
+      controller: _controller,
+      onChanged: widget.onChanged,
       style: AppTextStyles.chipLabel,
       decoration: InputDecoration(
         hintText: 'Search stocks, investors, or news',
         hintStyle: AppTextStyles.chipLabel.copyWith(color: AppColors.textMuted),
-        prefixIcon: const Icon(Icons.search, color: AppColors.textMuted),
-        suffixIcon: showClear
+        // prefixIcon: const Icon(Icons.search, color: AppColors.textMuted),
+        suffixIcon: widget.showClear
             ? IconButton(
-                icon: const Icon(Icons.close, color: AppColors.textMuted),
-                onPressed: onClear,
+                icon: SvgPicture.asset(
+                  AppIcons.xMarkCircle,
+                  width: 20,
+                  height: 20,
+                ),
+                onPressed: () {
+                  _controller.clear();
+                  widget.onClear();
+                },
               )
             : null,
         filled: true,
-        fillColor: AppColors.divider,
+        fillColor: AppColors.searchFieldBackground,
         isDense: true,
-        contentPadding: const EdgeInsets.symmetric(vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadii.chip),
           borderSide: BorderSide.none,
